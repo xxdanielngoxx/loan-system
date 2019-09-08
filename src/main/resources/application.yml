@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/loan_system?useSSL=false
+    username: root
+    password: Ngodinhloc261571838
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.xml
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.gmail.com
+          auth: true
+    host: smtp.gmail.com
+    username: danielngo1998@gmail.com
+    password: Ngodinhloc261571838
+    port: 587
+server:
+  port: 9090
+logging:
+  level:
+    liquibase: info
+twilio:
+  account_sid: ACf06d1f052373fb84c40cf507d0a264ba
+  authen_token: 06f847c45cdca862c02a2f63dcd1e4a9
+  trial_number: +12056192690

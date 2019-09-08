@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <property name="autoIncrement" value="true" dbms="mysql"/>
+
+    <changeSet id="create-base-table-users" author="danielngo1998@gmail.com">
+       <preConditions onFail="MARK_RAN">
+           <not>
+               <tableExists tableName="users"/>
+           </not>
+       </preConditions>
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="${autoIncrement}">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="TINYINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)"></column>
+            <column name="created_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="modified_by" type="VARCHAR(255)"></column>
+            <column name="modified_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create-base-table-roles" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="roles"/>
+            </not>
+        </preConditions>
+        <createTable tableName="roles">
+            <column name="id" type="BIGINT" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)"></column>
+            <column name="created_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="modified_by" type="VARCHAR(255)"></column>
+            <column name="modified_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create-base-table-user_roles" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_roles"></tableExists>
+            </not>
+        </preConditions>
+        <createTable tableName="user_roles">
+            <column name="id" type="BIGINT" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT"></column>
+            <column name="role_id" type="BIGINT"></column>
+        </createTable>
+        <addUniqueConstraint tableName="user_roles" columnNames="user_id, role_id"/>
+        <addForeignKeyConstraint baseTableName="user_roles" baseColumnNames="user_id" constraintName="fk_user_roles_users" referencedTableName="users"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="user_roles" baseColumnNames="role_id" constraintName="fk_user_roles_roles" referencedTableName="roles"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create-base-table-lenders" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="lenders"/>
+            </not>
+        </preConditions>
+        <createTable tableName="lenders">
+            <column name="id" type="BIGINT" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="identity_card" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="phone_number" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="province" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="district" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wards" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="street_address" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)"></column>
+            <column name="created_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="modified_by" type="VARCHAR(255)"></column>
+            <column name="modified_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="user_id" type="BIGINT">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="lenders" baseColumnNames="user_id" constraintName="fk_lenders_users" referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create-base-table-investments" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="investments"/>
+            </not>
+        </preConditions>
+        <createTable tableName="investments">
+            <column name="id" type="BIGINT" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
+            </column>
+            <column name="amount" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"></column>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lender_identity_card" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="investments" baseColumnNames="lender_identity_card" constraintName="fk_investments_lenders" referencedTableName="lenders"
+                                 referencedColumnNames="identity_card"/>
+    </changeSet>
+    <changeSet id="create-base-table-withdrawals" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="withdrawals"/>
+            </not>
+        </preConditions>
+        <createTable tableName="withdrawals">
+            <column name="id" type="BIGINT" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
+            </column>
+            <column name="amount" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"></column>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lender_identity_card" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="withdrawals" baseColumnNames="lender_identity_card" constraintName="fk_withdrawals_lenders" referencedTableName="lenders"
+                                 referencedColumnNames="identity_card"/>
+    </changeSet>
+    <changeSet id="create-base-table-loans" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="loans"/>
+            </not>
+        </preConditions>
+        <createTable tableName="loans">
+            <column name="id" type="BIGINT" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="fund" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="period" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="base_rate" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"></column>
+            <column name="created_by" type="VARCHAR(255)"></column>
+            <column name="created_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="modified_by" type="VARCHAR(255)"></column>
+            <column name="modified_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="lender_identity_card" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="loans" baseColumnNames="lender_identity_card" constraintName="fk_loans_lenders" referencedTableName="lenders"
+                                 referencedColumnNames="identity_card"/>
+    </changeSet>
+    <changeSet id="create-base-table-borrowers" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="borrowers"/>
+            </not>
+        </preConditions>
+        <createTable tableName="borrowers">
+            <column name="id" type="BIGINT" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
+            </column>
+            <column name="identity_card" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="phone_number" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="province" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="district" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wards" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="street_address" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)"></column>
+            <column name="created_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="modified_by" type="VARCHAR(255)"></column>
+            <column name="modified_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create-base-table-transactions" author="danielngo1998@gmail.com">
+        <preConditions>
+            <not>
+                <tableExists tableName="transactions"/>
+            </not>
+        </preConditions>
+        <createTable tableName="transactions">
+            <column name="id" type="BIGINT" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"></column>
+            <column name="started_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="borrower_identity_card" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="loan_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="transactions" baseColumnNames="borrower_identity_card" constraintName="fk_transactions_borrowers" referencedTableName="borrowers"
+                                 referencedColumnNames="identity_card"/>
+        <addForeignKeyConstraint baseTableName="transactions" baseColumnNames="loan_id" constraintName="fk_transactions_loans" referencedTableName="loans"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
