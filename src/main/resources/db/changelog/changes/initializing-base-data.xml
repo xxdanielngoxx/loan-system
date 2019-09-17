@@ -13,16 +13,19 @@
             </sqlCheck>
         </preConditions>
         <insert tableName="roles">
+            <column name="id" value="1"/>
             <column name="role" value="ADMIN"/>
             <column name="created_by" value="SYSTEM"/>
             <column name="modified_by" value="SYSTEM"/>
         </insert>
         <insert tableName="roles">
+            <column name="id" value="2"/>
             <column name="role" value="LENDER"/>
             <column name="created_by" value="SYSTEM"/>
             <column name="modified_by" value="SYSTEM"/>
         </insert>
         <insert tableName="roles">
+            <column name="id" value="3"/>
             <column name="role" value="BORROWER"/>
             <column name="created_by" value="SYSTEM"/>
             <column name="modified_by" value="SYSTEM"/>

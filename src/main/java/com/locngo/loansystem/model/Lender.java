@@ -18,7 +18,8 @@ public class Lender implements Serializable {
     private static final long serialVersionUID = -891084104771265837L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lender_sequence")
+    @SequenceGenerator(sequenceName = "lender_sequence", name = "lender_sequence", allocationSize = 1)
     private Long id;
 
     @NotNull

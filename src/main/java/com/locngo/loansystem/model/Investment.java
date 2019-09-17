@@ -2,6 +2,7 @@ package com.locngo.loansystem.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -16,7 +17,8 @@ public class Investment implements Serializable {
     private static final long serialVersionUID = -6317041907374159283L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "investment_sequence")
+    @SequenceGenerator(sequenceName = "investment_sequence", name = "investment_sequence", allocationSize = 1)
     private Long id;
 
     @Column(name = "amount", nullable = false)
@@ -27,8 +29,7 @@ public class Investment implements Serializable {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lender_identity_card",
-            referencedColumnName = "identity_card")
+    @JoinColumn(name = "lender_id")
     private Lender lender;
 
     @CreatedDate
