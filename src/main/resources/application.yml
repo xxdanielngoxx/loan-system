@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/loan_system?useSSL=false
+    url: jdbc:postgresql://localhost:5432/loan_system?useSSL=false
     username: root
     password: Ngodinhloc261571838
   jpa:
@@ -9,7 +9,10 @@ spring:
       ddl-auto: none
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
   liquibase:
     change-log: classpath:/db/changelog/changelog-master.xml
   mail:
@@ -26,7 +29,7 @@ spring:
     password: Ngodinhloc261571838
     port: 587
 server:
-  port: 9090
+  port: 8080
 logging:
   level:
     liquibase: info

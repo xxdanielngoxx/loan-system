@@ -10,7 +10,6 @@ import com.locngo.loansystem.request.loan.LoanCreateRequest;
 import com.locngo.loansystem.service.LenderService;
 import com.locngo.loansystem.service.LoanService;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +19,7 @@ public class LoanServiceImpl implements LoanService {
 
     private final LoanRepository loanRepository;
 
-    private LenderService lenderService;
+    private final LenderService lenderService;
 
     public LoanServiceImpl(LoanRepository loanRepository,
                            LenderService lenderService) {

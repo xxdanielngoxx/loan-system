@@ -9,13 +9,11 @@ import com.locngo.loansystem.request.withdrawal.CreateWithdrawalRequest;
 import com.locngo.loansystem.sercurity.otp.Otp;
 import com.locngo.loansystem.sercurity.otp.OtpGenerator;
 import com.locngo.loansystem.service.LenderService;
-import com.locngo.loansystem.service.UserService;
 import com.locngo.loansystem.service.WithdrawalService;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class WithdrawalServiceImpl implements WithdrawalService {

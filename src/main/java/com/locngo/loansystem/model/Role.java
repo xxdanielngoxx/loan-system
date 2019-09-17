@@ -12,7 +12,8 @@ public class Role implements GrantedAuthority, Serializable {
     private static final long serialVersionUID = 6755727554489984645L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_sequence")
+    @SequenceGenerator(sequenceName = "role_sequence", name = "role_sequence", allocationSize = 1)
     private Long id;
 
     @Column(name = "role", unique = true, nullable = false)

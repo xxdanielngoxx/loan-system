@@ -51,6 +51,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return this.buildResponseEntity(new ApiError(HttpStatus.CONFLICT, exception));
     }
 
+    @ExceptionHandler(PaymentWasPaidException.class)
+    public ResponseEntity<Object> handlePaymentWasPaidException(PaymentWasPaidException exception) {
+        return this.buildResponseEntity(new ApiError(HttpStatus.CONFLICT, exception));
+    }
+
+    @ExceptionHandler(TransactionWasPaidException.class)
+    public ResponseEntity<Object> handleTransactionWasPaidException(TransactionWasPaidException exception) {
+        return this.buildResponseEntity(new ApiError(HttpStatus.CONFLICT, exception));
+    }
+
+    @ExceptionHandler(NotificationInterruptException.class)
     public ResponseEntity<Object> handleNotificationInterruptException(NotificationInterruptException exception) {
         return this.buildResponseEntity(new ApiError(HttpStatus.FAILED_DEPENDENCY, exception));
     }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="create-base-lender-sequence" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="lender_sequence"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="lender_sequence" startValue="1000" minValue="1000" incrementBy="1"
+                        catalogName="lenders"/>
+    </changeSet>
+    <changeSet id="create-base-user-sequence" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="user_sequence"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="user_sequence" startValue="1000" minValue="1000" incrementBy="1"
+                        catalogName="users"/>
+    </changeSet>
+    <changeSet id="create-base-role-sequence" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="role_sequence"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="role_sequence" startValue="1000" minValue="1000" incrementBy="1"
+                        catalogName="roles"/>
+    </changeSet>
+    <changeSet id="create-base-investment-sequence" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="investment_sequence"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="investment_sequence" startValue="1000" minValue="1000" incrementBy="1"
+                        catalogName="investments"/>
+    </changeSet>
+    <changeSet id="create-base-withdrawal-sequence" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="withdrawal_sequence"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="withdrawal_sequence" startValue="1000" minValue="1000" incrementBy="1"
+                        catalogName="withdrawals"/>
+    </changeSet>
+    <changeSet id="create-base-loan-sequence" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="loan_sequence"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="loan_sequence" startValue="1000" minValue="1000" incrementBy="1"
+                        catalogName="loans"/>
+    </changeSet>
+    <changeSet id="create-base-transaction-sequence" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="transaction_sequence"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="transaction_sequence" startValue="1000" minValue="1000" incrementBy="1"
+                        catalogName="transactions"/>
+    </changeSet>
+    <changeSet id="create-base-borrower-sequence" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="borrowers_sequence"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="borrower_sequence" startValue="1000" minValue="1000" incrementBy="1"
+                        catalogName="borrowers"/>
+    </changeSet>
+    <changeSet id="create-base-payment-sequence" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="payment_sequence"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="payment_sequence" startValue="1000" minValue="1000" incrementBy="1"
+                        catalogName="payments"/>
+    </changeSet>
+</databaseChangeLog>

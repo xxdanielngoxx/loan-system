@@ -57,6 +57,7 @@ public class OtpGeneratorImpl implements OtpGenerator {
             this.clearOtpFromCache(key);
             return true;
         }
+        this.clearOtpFromCache(key);
         return false;
     }
 

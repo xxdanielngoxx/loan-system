@@ -1,0 +1,1 @@
+package com.locngo.loansystem.util.specification;

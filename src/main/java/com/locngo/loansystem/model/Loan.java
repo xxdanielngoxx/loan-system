@@ -2,6 +2,7 @@ package com.locngo.loansystem.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,7 +16,8 @@ public class Loan implements Serializable {
     private static final long serialVersionUID = 6979929817457695066L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "loan_sequence")
+    @SequenceGenerator(sequenceName = "loan_sequence", name = "loan_sequence", allocationSize = 1)
     private Long id;
 
     @NotNull
@@ -41,8 +43,7 @@ public class Loan implements Serializable {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lender_identity_card",
-            referencedColumnName = "identity_card")
+    @JoinColumn(name = "lender_id")
     private Lender lender;
 
     @OneToMany(mappedBy = "loan")
