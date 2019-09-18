@@ -5,6 +5,7 @@ import com.locngo.loansystem.request.borrower.BorrowerCreateRequest;
 import com.locngo.loansystem.request.common.OtpRegisterRequest;
 import com.locngo.loansystem.sercurity.otp.Otp;
 import com.locngo.loansystem.service.BorrowerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +21,9 @@ public class BorrowerController {
     }
 
     @GetMapping("/otp")
-    public Otp getOtpRegister(@RequestBody OtpRegisterRequest request) {
-        return this.borrowerService.getOtpRegister(request);
+    @ResponseStatus(HttpStatus.OK)
+    public void getOtpRegister(@RequestBody OtpRegisterRequest request) {
+        this.borrowerService.getOtpRegister(request);
     }
 
     @PostMapping

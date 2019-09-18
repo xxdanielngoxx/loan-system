@@ -1,9 +1,12 @@
 package com.locngo.loansystem.service.impl;
 
+import com.locngo.loansystem.errorhandling.error.BadCredentialsException;
 import com.locngo.loansystem.errorhandling.error.DataNotFoundException;
 import com.locngo.loansystem.model.*;
+import com.locngo.loansystem.notificationsystem.sms.service.SmsService;
 import com.locngo.loansystem.repository.TransactionRepository;
 import com.locngo.loansystem.request.transaction.CreateTransactionRequest;
+import com.locngo.loansystem.sercurity.otp.OtpGenerator;
 import com.locngo.loansystem.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,50 +32,68 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
 
+    private final OtpGenerator otpGenerator;
+
+    private final SmsService smsService;
+
     public TransactionServiceImpl(LoanService loanService,
                                   BorrowerService borrowerService,
                                   LenderService lenderService,
                                   PaymentService paymentService,
-                                  TransactionRepository transactionRepository) {
+                                  TransactionRepository transactionRepository,
+                                  OtpGenerator otpGenerator,
+                                  SmsService smsService) {
         this.loanService = loanService;
         this.borrowerService = borrowerService;
         this.lenderService = lenderService;
         this.paymentService = paymentService;
         this.transactionRepository = transactionRepository;
+        this.otpGenerator = otpGenerator;
+        this.smsService = smsService;
+    }
+
+    @Override
+    public void getOtpTransaction() {
+        String otp = this.otpGenerator.generateOtpTransaction(lenderService.getCurrentLender().getUser().getUsername());
+        LOGGER.info("OTP Transaction Code Provide: {}" + otp);
+        this.smsService.sendSms(lenderService.getCurrentLender().getPhoneNumber(), "Transaction OTP Code: " + otp);
     }
 
     @Override
     public Transaction createTransaction(CreateTransactionRequest request) {
+        LOGGER.info("OTP Transaction Code Request: {}" + request.getOtp());
+        if (this.otpGenerator.validateOtp(this.lenderService.getCurrentLender().getUser().getUsername(), request.getOtp())) {
+            Transaction transaction = new Transaction();
 
-        Transaction transaction = new Transaction();
+            Loan loan = loanService.getLoan(request.getLoanId());
+            transaction.setLoan(loan);
 
-        Loan loan = loanService.getLoan(request.getLoanId());
-        transaction.setLoan(loan);
+            Borrower borrower = borrowerService.getBorrower(request.getBorrowerId());
+            transaction.setBorrower(borrower);
 
-        Borrower borrower = borrowerService.getBorrower(request.getBorrowerId());
-        transaction.setBorrower(borrower);
+            transaction.setDescription(request.getDescription());
 
-        transaction.setDescription(request.getDescription());
+            transaction.setCreatedBy(lenderService.getCurrentLender().getEmail());
+            transaction.setCreatedDate(LocalDateTime.now());
 
-        transaction.setCreatedBy(lenderService.getCurrentLender().getEmail());
-        transaction.setCreatedDate(LocalDateTime.now());
+            transaction.setStartedDate(LocalDateTime.now()
+                    .truncatedTo(ChronoUnit.DAYS)
+                    .plusDays(1).truncatedTo(ChronoUnit.DAYS)
+                    .plusHours(8));
 
-        transaction.setStartedDate(LocalDateTime.now()
-                .truncatedTo(ChronoUnit.DAYS)
-                .plusDays(1).truncatedTo(ChronoUnit.DAYS)
-                .plusHours(8));
+            Transaction createdTransaction = transactionRepository.save(transaction);
 
-        Transaction createdTransaction = transactionRepository.save(transaction);
+            List<Payment> scheduledPayments = this.paymentService.schedulerPayments(
+                    this.schedulePayments(createdTransaction)
+            );
 
-        List<Payment> scheduledPayments = this.paymentService.schedulerPayments(
-                this.schedulePayments(createdTransaction)
-        );
+            scheduledPayments.forEach(payment -> createdTransaction.getPayments().add(payment));
 
-        scheduledPayments.forEach(payment -> createdTransaction.getPayments().add(payment));
+            LOGGER.info("Transaction: {}", transaction);
 
-        LOGGER.info("Transaction: {}", transaction);
-
-        return transactionRepository.save(createdTransaction);
+            return transactionRepository.save(createdTransaction);
+        }
+        throw new BadCredentialsException("Invalid OTP Code!");
     }
 
     @Override

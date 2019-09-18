@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class OtpGeneratorImpl implements OtpGenerator {
 
-    private static final Integer EXPIRE_MIN = 1;
+    private static final Integer EXPIRE_MIN = 5;
 
     private static final String ALPHA_NUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 

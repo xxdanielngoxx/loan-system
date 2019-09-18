@@ -1,7 +1,9 @@
 package com.locngo.loansystem.notificationsystem.sms.util;
 
+import com.locngo.loansystem.errorhandling.error.BadCredentialsException;
 import com.locngo.loansystem.notificationsystem.sms.request.SendSmsRequest;
 import com.locngo.loansystem.notificationsystem.sms.property.TwilioConfiguration;
+import com.twilio.exception.ApiException;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.rest.api.v2010.account.MessageCreator;
 import com.twilio.type.PhoneNumber;
@@ -22,22 +24,17 @@ public class TwilioSmsSender implements SmsSender {
 
     @Override
     public void sendSms(SendSmsRequest smsRequest) {
-        if (isPhoneNumberValid(smsRequest.getPhoneNumber())) {
+        try {
             PhoneNumber to = new PhoneNumber(smsRequest.getPhoneNumber());
             PhoneNumber from = new PhoneNumber(twilioConfiguration.getTrialNumber());
             String message = smsRequest.getMessage();
             MessageCreator creator = Message.creator(to, from, message);
             creator.create();
             LOGGER.info("Send sms: {}" + smsRequest);
-        } else {
-            throw new IllegalArgumentException(
+        } catch (ApiException exception) {
+            throw new BadCredentialsException(
                     "Phone number {" + smsRequest.getPhoneNumber() + "} is not a valid number"
             );
         }
-    }
-
-    private boolean isPhoneNumberValid(String phoneNumber) {
-        // TODO: Implement phone number validator
-        return true;
     }
 }

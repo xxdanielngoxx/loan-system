@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public interface InvestmentService {
 
-    Otp getOtpTransaction();
+    void getOtpTransaction();
 
     Investment createInvestment(CreateInvestmentRequest request);
 

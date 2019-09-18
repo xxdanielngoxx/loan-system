@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public interface BorrowerService {
 
-    Otp getOtpRegister(OtpRegisterRequest request);
+    void getOtpRegister(OtpRegisterRequest request);
 
     Borrower createBorrower(BorrowerCreateRequest request);
 

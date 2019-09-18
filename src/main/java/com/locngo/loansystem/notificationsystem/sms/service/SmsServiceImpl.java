@@ -19,4 +19,10 @@ public class SmsServiceImpl implements SmsService {
     public void sendSms(SendSmsRequest smsRequest) {
         this.smsSender.sendSms(smsRequest);
     }
+
+    @Override
+    public void sendSms(String phoneNumber, String message) {
+        SendSmsRequest request = new SendSmsRequest(phoneNumber, message);
+        this.smsSender.sendSms(request);
+    }
 }

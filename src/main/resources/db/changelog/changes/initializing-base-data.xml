@@ -6,6 +6,7 @@
                 xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
                 xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
                 http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <property name="now" value="now()" dbms="postgresql"/>
     <changeSet id="insert-base-date-table-roles" author="danielngo1998@gmail.com">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
@@ -16,19 +17,46 @@
             <column name="id" value="1"/>
             <column name="role" value="ADMIN"/>
             <column name="created_by" value="SYSTEM"/>
+            <column name="created_date" value="${now}"/>
             <column name="modified_by" value="SYSTEM"/>
+            <column name="modified_date" value="${now}"/>
         </insert>
         <insert tableName="roles">
             <column name="id" value="2"/>
             <column name="role" value="LENDER"/>
             <column name="created_by" value="SYSTEM"/>
+            <column name="created_date" value="${now}"/>
             <column name="modified_by" value="SYSTEM"/>
+            <column name="modified_date" value="${now}"/>
         </insert>
         <insert tableName="roles">
             <column name="id" value="3"/>
             <column name="role" value="BORROWER"/>
             <column name="created_by" value="SYSTEM"/>
+            <column name="created_date" value="${now}"/>
             <column name="modified_by" value="SYSTEM"/>
+            <column name="modified_date" value="${now}"/>
+        </insert>
+    </changeSet>
+    <changeSet id="insert-user-admin" author="danielngo1998@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(*) from users
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="users">
+            <column name="id" value="1"/>
+            <column name="username" value="admin"/>
+            <column name="password" value="$2a$12$1hsLUW35pC5jSs0EjIlP.OUemIyVGRg6vjDSPn11pj4tVp5l/pgDG"/>
+            <column name="created_by" value="SYSTEM"/>
+            <column name="created_date" value="${now}"/>
+            <column name="modified_by" value="SYSTEM"/>
+            <column name="modified_date" value="${now}"/>
+            <column name="status" value="1"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="1"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

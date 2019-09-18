@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
 
-    Otp signin(SigninRequest request);
+    void signin(SigninRequest request);
 
     Jwt getAccessToken(AccessTokenRequest accessTokenRequest);
 

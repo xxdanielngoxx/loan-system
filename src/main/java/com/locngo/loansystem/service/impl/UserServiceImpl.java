@@ -64,13 +64,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Otp signin(SigninRequest request) {
+    public void signin(SigninRequest request) {
         try {
             System.out.printf("{User name: %s, password: %s}", request.getUsername(), request.getPassword());
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             Otp otp = Otp.of(request.getUsername(), otpGenerator.generateOtp(request.getUsername()));
-            // this.testSendOtp(otp.getValue());
-            return otp;
+            this.sendOtp(request.getUsername(), otp.getValue());
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username password");
         }
@@ -119,8 +118,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByUsernameIgnoreCase(username);
     }
 
-    private void testSendOtp(String otp) {
-        SendSmsRequest request = new SendSmsRequest("+84989968143", "Verified code: " + otp);
+    private void sendOtp(String username, String otp) {
+        User currentUser = this.getUserByUsername(username);
+        SendSmsRequest request = new SendSmsRequest(currentUser.getLender().getPhoneNumber(), "Verified code: " + otp);
         this.smsService.sendSms(request);
     }
 }

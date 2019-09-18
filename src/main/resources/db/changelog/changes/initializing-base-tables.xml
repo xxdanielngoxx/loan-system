@@ -283,7 +283,7 @@
             <column name="loan_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="paid" type="TINYINT(1)">
+            <column name="paid" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -310,16 +310,16 @@
             <column name="amount" type="DOUBLE">
                 <constraints nullable="false"/>
             </column>
-            <column name="paid" type="TINYINT(1)">
+            <column name="paid" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
-            <column name="repayment" type="TINYINT(1)">
+            <column name="repayment" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
             <column name="transaction_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="deleted" type="TINYINT(1)">
+            <column name="deleted" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
             <column name="owner_repayment_id" type="BIGINT"></column>

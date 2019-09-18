@@ -23,6 +23,8 @@ public class LenderCreateRequest {
 
     private Address address;
 
+    private String otp;
+
     public LenderCreateRequest(String identityCard, String firstName, String lastName, String email, String password) {
         this.identityCard = identityCard;
         this.firstName = firstName;
@@ -85,5 +87,13 @@ public class LenderCreateRequest {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
     }
 }

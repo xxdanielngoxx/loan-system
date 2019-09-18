@@ -4,6 +4,7 @@ import com.locngo.loansystem.model.Withdrawal;
 import com.locngo.loansystem.request.withdrawal.CreateWithdrawalRequest;
 import com.locngo.loansystem.sercurity.otp.Otp;
 import com.locngo.loansystem.service.WithdrawalService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +20,9 @@ public class WithdrawalController {
     }
 
     @GetMapping("/otp")
-    public Otp getOtpTransaction() {
-        return this.withdrawalService.getOtpTransaction();
+    @ResponseStatus(HttpStatus.OK)
+    public void getOtpTransaction() {
+        this.withdrawalService.getOtpTransaction();
     }
 
     @PostMapping

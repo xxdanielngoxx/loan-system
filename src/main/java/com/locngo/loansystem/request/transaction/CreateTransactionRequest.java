@@ -12,6 +12,8 @@ public class CreateTransactionRequest {
 
     private String description;
 
+    private String otp;
+
     public Long getLoanId() {
         return loanId;
     }
@@ -34,5 +36,13 @@ public class CreateTransactionRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
     }
 }

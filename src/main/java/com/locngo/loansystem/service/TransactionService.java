@@ -12,6 +12,8 @@ import java.util.Optional;
 @Service
 public interface TransactionService {
 
+    void getOtpTransaction();
+
     Transaction createTransaction(CreateTransactionRequest request);
 
     List<Transaction> getAllTransaction();

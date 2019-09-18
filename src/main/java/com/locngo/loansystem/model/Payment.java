@@ -33,7 +33,7 @@ public class Payment implements Serializable {
     private Boolean paid = false;
 
     @Column(name = "deleted", nullable = false)
-    private Boolean deleted;
+    private Boolean deleted = false;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

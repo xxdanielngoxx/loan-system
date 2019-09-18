@@ -5,6 +5,7 @@ import com.locngo.loansystem.errorhandling.error.DataNotFoundException;
 import com.locngo.loansystem.model.Investment;
 import com.locngo.loansystem.model.Lender;
 import com.locngo.loansystem.model.User;
+import com.locngo.loansystem.notificationsystem.sms.service.SmsService;
 import com.locngo.loansystem.repository.InvestmentRepository;
 import com.locngo.loansystem.request.Investment.CreateInvestmentRequest;
 import com.locngo.loansystem.sercurity.otp.Otp;
@@ -25,18 +26,24 @@ public class InvestmentServiceImpl implements InvestmentService {
 
     private final OtpGenerator otpGenerator;
 
+    private final SmsService smsService;
+
     public InvestmentServiceImpl(InvestmentRepository investmentRepository,
                                  LenderService lenderService,
-                                 OtpGenerator otpGenerator) {
+                                 OtpGenerator otpGenerator,
+                                 SmsService smsService) {
         this.investmentRepository = investmentRepository;
         this.lenderService = lenderService;
         this.otpGenerator = otpGenerator;
+        this.smsService = smsService;
     }
 
     @Override
-    public Otp getOtpTransaction() {
+    public void getOtpTransaction() {
         String otp = this.otpGenerator.generateOtpTransaction(this.lenderService.getCurrentLender().getUser().getUsername());
-        return Otp.of("Transaction OTP Code", otp);
+        smsService.sendSms(
+                lenderService.getCurrentLender().getPhoneNumber(), "Transaction OTP Code: " + otp
+        );
     }
 
     @Override

@@ -46,7 +46,7 @@ public class Transaction implements Serializable {
 
     @JsonProperty("paid")
     @Column(name = "paid")
-    private Boolean paid;
+    private Boolean paid = false;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

@@ -1,15 +1,15 @@
 package com.locngo.loansystem.service.impl;
 
-import com.locngo.loansystem.errorhandling.error.DataNotFoundException;
-import com.locngo.loansystem.errorhandling.error.EmailAlreadyExistedException;
-import com.locngo.loansystem.errorhandling.error.IdentityCardAlreadyExistedException;
-import com.locngo.loansystem.errorhandling.error.PhoneNumberAlreadyExistedException;
+import com.locngo.loansystem.errorhandling.error.*;
 import com.locngo.loansystem.model.BaseEntity;
 import com.locngo.loansystem.model.Lender;
 import com.locngo.loansystem.model.User;
+import com.locngo.loansystem.notificationsystem.sms.service.SmsService;
 import com.locngo.loansystem.repository.LenderRepository;
+import com.locngo.loansystem.request.common.OtpRegisterRequest;
 import com.locngo.loansystem.request.lender.LenderCreateRequest;
 import com.locngo.loansystem.request.user.CreateUserRequest;
+import com.locngo.loansystem.sercurity.otp.OtpGenerator;
 import com.locngo.loansystem.service.LenderService;
 import com.locngo.loansystem.service.UserService;
 import org.slf4j.Logger;
@@ -29,14 +29,33 @@ public class LenderServiceImpl implements LenderService {
 
     private final UserService userService;
 
+    private final OtpGenerator otpGenerator;
+
+    private final SmsService smsService;
+
     public LenderServiceImpl(LenderRepository lenderRepository,
-                             UserService userService) {
+                             UserService userService,
+                             OtpGenerator otpGenerator,
+                             SmsService smsService) {
         this.lenderRepository = lenderRepository;
         this.userService = userService;
+        this.otpGenerator = otpGenerator;
+        this.smsService = smsService;
+    }
+
+    @Override
+    public void getOtpRegister(OtpRegisterRequest request) {
+        if (this.isPhoneNumberAlreadyExisted(request.getPhoneNumber())) {
+            throw new PhoneNumberAlreadyExistedException(request.getPhoneNumber());
+        }
+        String otp = otpGenerator.generateOtp(request.getPhoneNumber());
+        this.smsService.sendSms(request.getPhoneNumber(), "Verified Code: " + otp);
     }
 
     @Override
     public Lender createLender(LenderCreateRequest request) {
+        this.validatePhoneNumber(request.getPhoneNumber(), request.getOtp());
+
         if (!this.isEmailAlreadyExisted(request.getEmail())) {
             Lender lender = new Lender();
             lender.setFirstName(request.getFirstName());
@@ -108,5 +127,12 @@ public class LenderServiceImpl implements LenderService {
 
     private Boolean isIdentityCardAlreadyExisted(String identityCard) {
         return this.lenderRepository.existsByIdentityCardIgnoreCase(identityCard);
+    }
+
+    private boolean validatePhoneNumber(String phoneNumber, String otp) {
+        if (this.otpGenerator.validateOtp(phoneNumber, otp)) {
+            return true;
+        }
+        throw new BadCredentialsException("Invalid OTP Code!");
     }
 }

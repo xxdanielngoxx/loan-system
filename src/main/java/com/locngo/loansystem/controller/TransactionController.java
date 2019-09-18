@@ -3,6 +3,7 @@ package com.locngo.loansystem.controller;
 import com.locngo.loansystem.model.Transaction;
 import com.locngo.loansystem.request.transaction.CreateTransactionRequest;
 import com.locngo.loansystem.service.TransactionService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,12 @@ public class TransactionController {
 
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
+    }
+
+    @GetMapping("/otp")
+    @ResponseStatus(HttpStatus.OK)
+    public void getOtpTransaction() {
+        this.transactionService.getOtpTransaction();
     }
 
     @PostMapping

@@ -4,9 +4,9 @@ import com.locngo.loansystem.errorhandling.error.BadCredentialsException;
 import com.locngo.loansystem.errorhandling.error.DataNotFoundException;
 import com.locngo.loansystem.model.Lender;
 import com.locngo.loansystem.model.Withdrawal;
+import com.locngo.loansystem.notificationsystem.sms.service.SmsService;
 import com.locngo.loansystem.repository.WithdrawalRepository;
 import com.locngo.loansystem.request.withdrawal.CreateWithdrawalRequest;
-import com.locngo.loansystem.sercurity.otp.Otp;
 import com.locngo.loansystem.sercurity.otp.OtpGenerator;
 import com.locngo.loansystem.service.LenderService;
 import com.locngo.loansystem.service.WithdrawalService;
@@ -24,18 +24,24 @@ public class WithdrawalServiceImpl implements WithdrawalService {
 
     private final OtpGenerator otpGenerator;
 
+    private final SmsService smsService;
+
     public WithdrawalServiceImpl(WithdrawalRepository withdrawalRepository,
                                  LenderService lenderService,
-                                 OtpGenerator otpGenerator) {
+                                 OtpGenerator otpGenerator,
+                                 SmsService smsService) {
         this.withdrawalRepository = withdrawalRepository;
         this.lenderService = lenderService;
         this.otpGenerator = otpGenerator;
+        this.smsService = smsService;
     }
 
     @Override
-    public Otp getOtpTransaction() {
+    public void getOtpTransaction() {
         String otp = otpGenerator.generateOtpTransaction(lenderService.getCurrentLender().getUser().getUsername());
-        return Otp.of("Transaction OTP Code", otp);
+        this.smsService.sendSms(
+                lenderService.getCurrentLender().getPhoneNumber(), "Transaction OTP Code: " + otp
+        );
     }
 
     @Override

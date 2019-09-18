@@ -6,6 +6,7 @@ import com.locngo.loansystem.request.user.AccessTokenRequest;
 import com.locngo.loansystem.request.user.SigninRequest;
 import com.locngo.loansystem.sercurity.otp.Otp;
 import com.locngo.loansystem.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,8 +20,9 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public Otp signin(@RequestBody SigninRequest request) {
-        return userService.signin(request);
+    @ResponseStatus(HttpStatus.OK)
+    public void signin(@RequestBody SigninRequest request) {
+        this.userService.signin(request);
     }
 
     @PostMapping("/access-token")

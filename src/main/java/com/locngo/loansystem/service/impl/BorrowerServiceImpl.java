@@ -4,6 +4,7 @@ import com.locngo.loansystem.errorhandling.error.*;
 import com.locngo.loansystem.model.Address;
 import com.locngo.loansystem.model.BaseEntity;
 import com.locngo.loansystem.model.Borrower;
+import com.locngo.loansystem.notificationsystem.sms.service.SmsService;
 import com.locngo.loansystem.repository.BorrowerRepository;
 import com.locngo.loansystem.request.borrower.BorrowerCreateRequest;
 import com.locngo.loansystem.request.common.OtpRegisterRequest;
@@ -29,21 +30,25 @@ public class BorrowerServiceImpl implements BorrowerService {
 
     private final UserService userService;
 
+    private final SmsService smsService;
+
     public BorrowerServiceImpl(BorrowerRepository borrowerRepository,
                                OtpGenerator otpGenerator,
-                               UserService userService) {
+                               UserService userService,
+                               SmsService smsService) {
         this.borrowerRepository = borrowerRepository;
         this.otpGenerator = otpGenerator;
         this.userService = userService;
+        this.smsService = smsService;
     }
 
     @Override
-    public Otp getOtpRegister(OtpRegisterRequest request) {
+    public void getOtpRegister(OtpRegisterRequest request) {
         if (this.isPhoneNumberAlreadyExisted(request.getPhoneNumber())) {
             throw new PhoneNumberAlreadyExistedException(request.getPhoneNumber());
         }
         String otp = otpGenerator.generateOtp(request.getPhoneNumber());
-        return Otp.of(request.getPhoneNumber(), otp);
+        this.smsService.sendSms(request.getPhoneNumber(), "Verified Code: " + otp);
     }
 
     @Override

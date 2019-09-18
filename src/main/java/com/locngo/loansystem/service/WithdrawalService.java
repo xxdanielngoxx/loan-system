@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public interface WithdrawalService {
 
-    Otp getOtpTransaction();
+    void getOtpTransaction();
 
     Withdrawal createWithdrawal(CreateWithdrawalRequest request);
 

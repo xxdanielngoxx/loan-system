@@ -2,6 +2,7 @@ package com.locngo.loansystem.service;
 
 import com.locngo.loansystem.model.Lender;
 import com.locngo.loansystem.model.User;
+import com.locngo.loansystem.request.common.OtpRegisterRequest;
 import com.locngo.loansystem.request.lender.LenderCreateRequest;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,8 @@ import java.util.Optional;
 
 @Service
 public interface LenderService {
+
+    void getOtpRegister(OtpRegisterRequest request);
 
     Lender createLender(LenderCreateRequest request);
 

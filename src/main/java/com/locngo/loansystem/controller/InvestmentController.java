@@ -4,6 +4,7 @@ import com.locngo.loansystem.model.Investment;
 import com.locngo.loansystem.request.Investment.CreateInvestmentRequest;
 import com.locngo.loansystem.sercurity.otp.Otp;
 import com.locngo.loansystem.service.InvestmentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +20,9 @@ public class InvestmentController {
     }
 
     @GetMapping("/otp")
-    public Otp getOtpTransaction() {
-        return this.investmentService.getOtpTransaction();
+    @ResponseStatus(HttpStatus.OK)
+    public void getOtpTransaction() {
+        this.investmentService.getOtpTransaction();
     }
 
     @PostMapping
