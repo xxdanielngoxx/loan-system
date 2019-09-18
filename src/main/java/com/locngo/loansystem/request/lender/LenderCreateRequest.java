@@ -25,12 +25,21 @@ public class LenderCreateRequest {
 
     private String otp;
 
-    public LenderCreateRequest(String identityCard, String firstName, String lastName, String email, String password) {
+    public LenderCreateRequest() {
+    }
+
+    public LenderCreateRequest(String identityCard,
+                               String firstName,
+                               String lastName,
+                               String email,
+                               String password,
+                               String otp) {
         this.identityCard = identityCard;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.otp = otp;
     }
 
     public String getIdentityCard() {

@@ -20,7 +20,7 @@ public class BorrowerController {
         this.borrowerService = borrowerService;
     }
 
-    @GetMapping("/otp")
+    @PostMapping("/otp")
     @ResponseStatus(HttpStatus.OK)
     public void getOtpRegister(@RequestBody OtpRegisterRequest request) {
         this.borrowerService.getOtpRegister(request);
